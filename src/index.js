@@ -24,4 +24,12 @@ function SafeCounter() {
   );
 }
 
-export { HelloWorld, SafeCounter, UnsafeCounter };
+function UpdateAfterRender() {
+  let [ctr, setCtr] = React.useState(0);
+  React.useEffect(() => {
+    setCtr(1);
+  }, []);
+  return ctr;
+}
+
+export { HelloWorld, SafeCounter, UnsafeCounter, UpdateAfterRender };

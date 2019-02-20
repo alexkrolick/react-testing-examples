@@ -8,7 +8,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import * as testUtils from "react-dom/test-utils";
 import "jest-dom/extend-expect";
-import { HelloWorld, SafeCounter, UnsafeCounter } from "./";
+import { HelloWorld, SafeCounter, UnsafeCounter, UpdateAfterRender } from "./";
 
 let root = null;
 const body = document.body;
@@ -73,4 +73,24 @@ test("SafeCounter increments on click when batched", () => {
     }
   });
   expect(getByText(body, "count: 3")).toBeInTheDocument();
+});
+
+test("UpdateAfterRender updates itself (act)", () => {
+  forceReactBatchUpdate(() => {
+    ReactDOM.render(<UpdateAfterRender />, root);
+    // initial render is sync so we can assert here
+    // but subsequent updates would be be batched
+    // so we can't assert about the DOM again until the final state
+    expect(getByText(body, "0")).toBeInTheDocument();
+  });
+  // final update is after the batch is applied
+  // assert about the final DOM state
+  expect(getByText(body, "1")).toBeInTheDocument();
+});
+
+test("UpdateAfterRender updates itself (waitForElement)", async () => {
+  ReactDOM.render(<UpdateAfterRender />, root);
+  // We can test the initial DOM state inline and then await the DOM update
+  expect(getByText(body, "0")).toBeInTheDocument();
+  expect(await waitForElement(() => getByText(body, "1"))).toBeInTheDocument();
 });
