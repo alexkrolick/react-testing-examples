@@ -79,8 +79,8 @@ The new `act()` api in React 16.8 collects state updates and forces a re-rerende
 
 ### Questions
 
-- It seems like `act()` is being recommended for wrapping all state updates in React tests, but is it necessary if you can use `waitForElement` to turn the whole test async?
-- Needing to manually choose how to group updates to resemble batch patterns the app will actually experience - is there some way to "fuzz" this and somehow trigger more batching in JSDOM automatically?
+- It seems like `act()` is being recommended for wrapping all state updates in React tests, but is it necessary to use it _everywhere_ if you can use `waitForElement` to turn the whole test async?
+- Developers need to manually choose how to group updates to resemble batch patterns the app will actually experience - is there some way to "fuzz" this and somehow trigger more batching in JSDOM automatically?
 - Some cases, like Promises that cause state updates, aren't currently wrappable with synchronous act() and still cause a warning - do these cases actually cause bugs if you are using something like waitForElement?
 - Is there anything that can be done to make this less obtrusive, either on the the react-testing-library side or through lint rules, async act(), etc.? Prior to this API, there were no React-specific details required in `react-testing-library` other than `render`.
 
