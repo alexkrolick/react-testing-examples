@@ -18,7 +18,7 @@ The most obvious[\*](#ymmv) way to deal with asynchronous events is to simply wa
 
 Whenever an asynchronous DOM update could happen, wrapping the next element query in `waitForElement` can be used to wait for the result.
 
-The example below is from [react-act-examples][react-act-examples]. It's using a useEffect hook with `[]` as the second argument (no data dependencies that would trigger the effect again), so the effect only runs after the initial render. It's the same as running `setState` in `componentDidMount` in a class component, _except_ the component renders once with the initial value first (useLayoutEffect would be exactly the same and only render with the final value).
+The example below is from [react-act-examples][react-act-examples]. It's using a useEffect hook with `[]` as the second argument (no data dependencies that would trigger the effect again), so the effect runs only once, after the initial render.
 
 ```jsx
 function UpdateAfterRender() {
