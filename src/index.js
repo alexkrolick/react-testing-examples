@@ -24,6 +24,24 @@ function SafeCounter() {
   );
 }
 
+class UnsafeCounterClass extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { counter: 0 };
+    this.handleClick = () => {
+      this.setState({ counter: this.state.counter + 1 });
+    };
+  }
+  render() {
+    return (
+      <div>
+        <p>count: {this.state.counter}</p>
+        <button onClick={this.handleClick}>+</button>
+      </div>
+    );
+  }
+}
+
 function UpdateAfterRender() {
   let [ctr, setCtr] = React.useState(0);
   React.useEffect(() => {
@@ -32,4 +50,10 @@ function UpdateAfterRender() {
   return ctr;
 }
 
-export { HelloWorld, SafeCounter, UnsafeCounter, UpdateAfterRender };
+export {
+  HelloWorld,
+  SafeCounter,
+  UnsafeCounter,
+  UnsafeCounterClass,
+  UpdateAfterRender
+};

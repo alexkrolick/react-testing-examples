@@ -8,7 +8,13 @@ import React from "react";
 import ReactDOM from "react-dom";
 import * as testUtils from "react-dom/test-utils";
 import "jest-dom/extend-expect";
-import { HelloWorld, SafeCounter, UnsafeCounter, UpdateAfterRender } from "./";
+import {
+  HelloWorld,
+  SafeCounter,
+  UnsafeCounter,
+  UnsafeCounterClass,
+  UpdateAfterRender
+} from "./";
 
 let root = null;
 const body = document.body;
@@ -42,8 +48,30 @@ test("UnsafeCounter increments on click when unbatched", () => {
   expect(getByText(body, "count: 3")).toBeInTheDocument();
 });
 
-test("UnsafeCounter drops increments on click when batched ⚠️", () => {
+test("⚠️  UnsafeCounter drops increments on click when batched", () => {
   ReactDOM.render(<UnsafeCounter />, root);
+  const button = getByText(body, "+");
+  forceReactBatchUpdate(() => {
+    for (let i = 0; i < 3; i++) {
+      fireEvent.click(button);
+    }
+  });
+  // the updates are batched so the component doesn't rerender between clicks
+  // thus the increment is only computed once
+  expect(getByText(body, "count: 1")).toBeInTheDocument();
+});
+
+test("UnsafeCounterClass increments on click when unbatched", () => {
+  ReactDOM.render(<UnsafeCounterClass />, root);
+  const button = getByText(body, "+");
+  for (let i = 0; i < 3; i++) {
+    fireEvent.click(button);
+  }
+  expect(getByText(body, "count: 3")).toBeInTheDocument();
+});
+
+test("⚠️  UnsafeCounterClass drops increments on click when batched", () => {
+  ReactDOM.render(<UnsafeCounterClass />, root);
   const button = getByText(body, "+");
   forceReactBatchUpdate(() => {
     for (let i = 0; i < 3; i++) {
