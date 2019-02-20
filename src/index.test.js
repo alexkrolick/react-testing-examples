@@ -1,8 +1,8 @@
 import {
-  within,
   waitForElement,
   fireEvent,
-  getByText
+  getByText,
+  queryByText
 } from "dom-testing-library";
 import React from "react";
 import ReactDOM from "react-dom";
@@ -13,7 +13,8 @@ import {
   SafeCounter,
   UnsafeCounter,
   UnsafeCounterClass,
-  UpdateAfterRender
+  UpdateAfterRender,
+  UpdateAfterRenderClass
 } from "./";
 
 let root = null;
@@ -120,5 +121,15 @@ test("UpdateAfterRender updates itself (waitForElement)", async () => {
   ReactDOM.render(<UpdateAfterRender />, root);
   // We can test the initial DOM state inline and then await the DOM update
   expect(getByText(body, "0")).toBeInTheDocument();
+  expect(await waitForElement(() => getByText(body, "1"))).toBeInTheDocument();
+});
+
+test("UpdateAfterRenderclass updates itself (waitForElement)", async () => {
+  ReactDOM.render(<UpdateAfterRenderClass />, root);
+  // componentDidMount resolves setState before updating the DOM
+  // so the initial state does not appear
+  expect(queryByText(body, "0")).not.toBeInTheDocument();
+  // This is technically synchronous so we don't need waitForElement unless we know
+  // the update is triggered by async code
   expect(await waitForElement(() => getByText(body, "1"))).toBeInTheDocument();
 });

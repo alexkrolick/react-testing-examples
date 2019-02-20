@@ -50,10 +50,35 @@ function UpdateAfterRender() {
   return ctr;
 }
 
+class UpdateAfterRenderClass extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      ctr: 0
+    };
+  }
+  componentDidMount() {
+    this.setState({ ctr: 1 });
+  }
+  render() {
+    return this.state.ctr;
+  }
+}
+
+function Timer() {
+  const [ctr, setCtr] = React.useState(0);
+  React.useEffect(() => {
+    setTimeout(() => setCtr(1), 1000);
+  }, []);
+  return ctr;
+}
+
 export {
   HelloWorld,
   SafeCounter,
   UnsafeCounter,
   UnsafeCounterClass,
-  UpdateAfterRender
+  UpdateAfterRender,
+  UpdateAfterRenderClass,
+  Timer
 };
